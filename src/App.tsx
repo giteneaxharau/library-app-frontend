@@ -2,11 +2,13 @@ import Header from './components/Header/Header';
 import Layout from './components/Layout';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './routes/Home';
+import ErrorPage from './routes/ErrorPage';
 
 const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Home />,
+		errorElement: <ErrorPage />,
 	},
 	{
 		path: '/categories',
