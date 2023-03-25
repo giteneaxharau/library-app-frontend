@@ -27,6 +27,7 @@ export default function LoginPage() {
 		handleSubmit,
 		formState: { errors },
 		setError,
+		clearErrors,
 		watch,
 	} = useForm({
 		resolver: zodResolver(loginSchema),
@@ -36,12 +37,16 @@ export default function LoginPage() {
 
 	useEffect(() => {
 		if (password) {
-			if (password.length < 6)
+			console.log('password: ', password);
+			if (password.length < 6) {
 				setError(
 					'password',
 					{ type: 'manual', message: 'Password must be at least 6 characters' },
 					{ shouldFocus: true }
 				);
+			} else {
+				return clearErrors('password');
+			}
 		}
 	}, [password]);
 

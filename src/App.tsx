@@ -5,6 +5,7 @@ import Home from './routes/Home';
 import ErrorPage from './routes/ErrorPage';
 import { AuthProvider } from './hooks/useAuth';
 import LoginPage from './routes/LoginPage';
+import RegisterPage from './routes/RegisterPage';
 
 const router = createBrowserRouter([
 	{
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
 	{
 		path: '/login',
 		element: <LoginPage />,
+	},
+	{
+		path: '/register',
+		element: <RegisterPage />,
 	},
 ]);
 const queryClient = new QueryClient();

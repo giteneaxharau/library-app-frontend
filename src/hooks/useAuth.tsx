@@ -10,7 +10,9 @@ interface AuthContext {
 		username: string,
 		password: string
 	) => Promise<void | { error: string[] }>;
-	signup: ({}: z.infer<typeof registerSchema>) => void;
+	signup: ({}: z.infer<typeof registerSchema>) => Promise<void | {
+		error: string[];
+	}>;
 	signout: () => Promise<void>;
 	authStatus: boolean;
 }
@@ -45,7 +47,7 @@ function useProvideAuth() {
 			}
 		);
 	};
-	const signup = ({
+	const signup = async ({
 		email,
 		password,
 		role,
@@ -53,7 +55,7 @@ function useProvideAuth() {
 		firstName,
 		lastName,
 	}: z.infer<typeof registerSchema>) => {
-		API.post('/UserAuth/register', {
+		return await API.post('/UserAuth/register', {
 			email,
 			password,
 			role,
@@ -63,7 +65,11 @@ function useProvideAuth() {
 		}).then(async (res) => {
 			if (res.statusCode === 200) {
 				console.log(res);
-				await signin(userName, password);
+				await signin(userName, password).then((res) => {
+					if (res.statusCode !== 201) return { err: res.errorMessages };
+				});
+			} else {
+				return { error: res.errorMessages };
 			}
 		});
 	};
