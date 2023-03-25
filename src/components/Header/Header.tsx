@@ -14,6 +14,7 @@ import {
 	useColorModeValue,
 	useBreakpointValue,
 	useDisclosure,
+	Avatar,
 } from '@chakra-ui/react';
 import {
 	HamburgerIcon,
@@ -21,8 +22,12 @@ import {
 	ChevronDownIcon,
 	ChevronRightIcon,
 } from '@chakra-ui/icons';
+import fetch from '../../utils/fetch';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Header() {
+	const { authStatus, user } = useAuth();
+	console.log('user', user);
 	const { isOpen, onToggle } = useDisclosure();
 
 	return (
@@ -71,38 +76,61 @@ export default function Header() {
 					</Flex>
 				</Flex>
 
-				<Stack
-					flex={{ base: 1, md: 0 }}
-					justify={'flex-end'}
-					direction={'row'}
-					spacing={6}
-				>
-					<Button
-						as={'a'}
-						fontSize={'md'}
-						fontWeight={400}
-						variant={'link'}
-						href={'#'}
+				{!authStatus ? (
+					<Stack
+						flex={{ base: 1, md: 0 }}
+						justify={'flex-end'}
+						direction={'row'}
+						spacing={6}
 					>
-						Sign In
-					</Button>
-					<Button
-						as={'a'}
-						display={{ base: 'none', md: 'inline-flex' }}
-						fontSize={'md'}
-						fontWeight={600}
-						color={'white'}
-						bg={'blue.500'}
-						href={'#'}
-						_hover={{
-							bg: 'blue.400',
-						}}
+						<Button
+							as={'a'}
+							display={{ base: 'none', md: 'inline-flex' }}
+							fontSize={'md'}
+							fontWeight={600}
+							color={'white'}
+							bg={'blue.500'}
+							href={'/login'}
+							_hover={{
+								bg: 'blue.400',
+							}}
+						>
+							Sign In
+						</Button>
+					</Stack>
+				) : (
+					<Stack
+						flex={{ base: 1, md: 0 }}
+						justify={'flex-end'}
+						direction={'row'}
+						spacing={6}
 					>
-						Sign Up
-					</Button>
-				</Stack>
+						<Avatar
+							animation={'ease-in-out'}
+							size={'md'}
+							name={user?.firstName + ' ' + user?.lastName}
+						/>
+						<Button
+							as={'a'}
+							display={{ base: 'none', md: 'inline-flex' }}
+							fontSize={'md'}
+							fontWeight={600}
+							color={'white'}
+							bg={'blue.500'}
+							href={'/'}
+							onClick={() => {
+								sessionStorage.removeItem('token');
+								window.location.pathname = '/';
+							}}
+							_hover={{
+								bg: 'blue.400',
+							}}
+						>
+							Log Out
+						</Button>
+					</Stack>
+				)}
 			</Flex>
-
 			<Collapse in={isOpen} animateOpacity>
 				<MobileNav />
 			</Collapse>

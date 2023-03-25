@@ -8,18 +8,18 @@ interface FetchOptions {
 }
 
 const port = 5208;
-const baseURL = `http://localhost:${port}/api`;
+const baseURL = `http://localhost:${port}/api/v1/`;
 
 const instance = axios.create({
 	baseURL: baseURL,
 	timeout: 1000,
-	headers: {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-	},
+	// headers: {
+	// 	'Content-Type': 'application/json',
+	// 	Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+	// },
 });
 
-export const fetch: FetchOptions = {
+const API: FetchOptions = {
 	get: async (url, params) => {
 		try {
 			const response = await instance.get(url, params);
@@ -53,3 +53,5 @@ export const fetch: FetchOptions = {
 		}
 	},
 };
+
+export default API;

@@ -1,8 +1,10 @@
-import Header from './components/Header/Header';
-import Layout from './components/Layout';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
+import Layout from './components/Layout';
 import Home from './routes/Home';
 import ErrorPage from './routes/ErrorPage';
+import { AuthProvider } from './hooks/useAuth';
+import LoginPage from './routes/LoginPage';
 
 const router = createBrowserRouter([
 	{
@@ -30,13 +32,19 @@ const router = createBrowserRouter([
 		path: '/authors/:id',
 		element: <Layout>Author</Layout>,
 	},
+	{
+		path: '/login',
+		element: <LoginPage />,
+	},
 ]);
+const queryClient = new QueryClient();
 
 export default function App() {
 	return (
-		<RouterProvider router={router} />
-		// <div className="App">
-		// 	<Layout>asdas</Layout>
-		// </div>
+		<QueryClientProvider client={queryClient}>
+			<AuthProvider>
+				<RouterProvider router={router} />
+			</AuthProvider>
+		</QueryClientProvider>
 	);
 }

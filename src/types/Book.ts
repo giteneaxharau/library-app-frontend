@@ -6,6 +6,7 @@ export type Book = {
 	description: string;
 	createdAt: Date;
 	updatedAt: Date;
+	images: string[];
 	createdBy: string;
 	categories: Partial<Category>[];
 };
