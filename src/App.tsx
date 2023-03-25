@@ -6,6 +6,8 @@ import ErrorPage from './routes/ErrorPage';
 import { AuthProvider } from './hooks/useAuth';
 import LoginPage from './routes/LoginPage';
 import RegisterPage from './routes/RegisterPage';
+import AllCategories from './routes/Categories/AllCategories';
+import CategoryBooks from './routes/Categories/CategoryBooks';
 
 const router = createBrowserRouter([
 	{
@@ -15,11 +17,19 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/categories',
-		element: <Layout>Categories</Layout>,
+		element: (
+			<Layout>
+				<AllCategories />
+			</Layout>
+		),
 	},
 	{
 		path: '/categories/:id',
-		element: <Layout>Category</Layout>,
+		element: (
+			<Layout>
+				<CategoryBooks />
+			</Layout>
+		),
 	},
 	{
 		path: '/books/:id',

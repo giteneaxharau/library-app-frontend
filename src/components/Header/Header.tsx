@@ -22,13 +22,15 @@ import {
 	ChevronDownIcon,
 	ChevronRightIcon,
 } from '@chakra-ui/icons';
-import fetch from '../../utils/fetch';
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 export default function Header() {
 	const { authStatus, user } = useAuth();
-	console.log('user', user);
+	const navigate = useNavigate();
 	const { isOpen, onToggle } = useDisclosure();
+	const userJWT = jwtDecode(sessionStorage.getItem('token') || 'null');
 
 	return (
 		<Box>
@@ -66,13 +68,17 @@ export default function Header() {
 						textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
 						fontFamily={'heading'}
 						fontSize="xl"
+						cursor={'pointer'}
 						color={useColorModeValue('gray.800', 'white')}
+						onClick={() => navigate('/')}
 					>
 						Logo
 					</Text>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-						<DesktopNav />
+						<DesktopNav
+							{...{ authStatus: (userJWT as any).role === 'Admin' }}
+						/>
 					</Flex>
 				</Flex>
 
@@ -108,7 +114,7 @@ export default function Header() {
 						<Avatar
 							animation={'ease-in-out'}
 							size={'md'}
-							name={user?.firstName + ' ' + user?.lastName}
+							name={(userJWT as any).unique_name}
 						/>
 						<Button
 							as={'a'}
@@ -132,20 +138,22 @@ export default function Header() {
 				)}
 			</Flex>
 			<Collapse in={isOpen} animateOpacity>
-				<MobileNav />
+				<MobileNav {...{ authStatus: (userJWT as any).role === 'Admin' }} />
 			</Collapse>
 		</Box>
 	);
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({ authStatus }: { authStatus: boolean }) => {
 	const linkColor = useColorModeValue('gray.600', 'gray.200');
 	const linkHoverColor = useColorModeValue('gray.800', 'white');
 	const popoverContentBgColor = useColorModeValue('white', 'gray.800');
 
 	return (
 		<Stack direction={'row'} spacing={4}>
-			{NAV_ITEMS.map((navItem) => (
+			{NAV_ITEMS.filter((v) =>
+				authStatus ? v : !v.label.toLowerCase().includes('admin')
+			).map((navItem) => (
 				<Box key={navItem.label}>
 					<Popover trigger={'hover'} placement={'bottom-start'}>
 						<PopoverTrigger>
@@ -222,14 +230,16 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
 	);
 };
 
-const MobileNav = () => {
+const MobileNav = ({ authStatus }: { authStatus: boolean }) => {
 	return (
 		<Stack
 			bg={useColorModeValue('white', 'gray.800')}
 			p={4}
 			display={{ md: 'none' }}
 		>
-			{NAV_ITEMS.map((navItem) => (
+			{NAV_ITEMS.filter((v) =>
+				authStatus ? v : !v.label.toLowerCase().includes('admin')
+			).map((navItem) => (
 				<MobileNavItem key={navItem.label} {...navItem} />
 			))}
 		</Stack>
@@ -306,7 +316,7 @@ const NAV_ITEMS: Array<NavItem> = [
 		href: '/authors',
 	},
 	{
-		label: 'About',
-		href: '/',
+		label: 'Admin Panel',
+		href: '/admin',
 	},
 ];

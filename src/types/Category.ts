@@ -1,3 +1,4 @@
+import { Author } from './Author';
 import { Book } from './Book';
 
 export type Category = {
@@ -7,5 +8,11 @@ export type Category = {
 	createdAt: Date;
 	updatedAt: Date;
 	createdBy: string;
-	books: Partial<Book>[];
+	books: {
+		id: string;
+		name: string;
+		description: string;
+		author: Partial<Author>;
+		image: string[];
+	}[];
 };

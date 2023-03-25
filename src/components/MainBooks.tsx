@@ -9,7 +9,15 @@ export default function MainBooks() {
 	// console.log(data.result);
 	if (isLoading) return <div>Loading...</div>;
 	return (
-		<Grid templateColumns={'repeat(3, 1fr)'} gap={10}>
+		<Grid
+			templateColumns={{
+				base: 'repeat(3, 1fr)',
+				md: 'repeat(2, 1fr)',
+				lg: 'repeat(3, 1fr)',
+				sm: 'repeat(1, 1fr)',
+			}}
+			gap={10}
+		>
 			{data.result.map((book: Book) => {
 				return (
 					<GridItem key={book.id} w="100%" h="100%">
