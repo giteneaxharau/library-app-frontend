@@ -30,7 +30,9 @@ export default function Header() {
 	const { authStatus, user } = useAuth();
 	const navigate = useNavigate();
 	const { isOpen, onToggle } = useDisclosure();
-	const userJWT = jwtDecode(sessionStorage.getItem('token') || 'null');
+	const userJWT = authStatus
+		? jwtDecode(sessionStorage.getItem('token') || '')
+		: null;
 
 	return (
 		<Box>
@@ -77,7 +79,7 @@ export default function Header() {
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
 						<DesktopNav
-							{...{ authStatus: (userJWT as any).role === 'Admin' }}
+							{...{ authStatus: ((userJWT as any)?.role || '') === 'Admin' }}
 						/>
 					</Flex>
 				</Flex>
@@ -114,7 +116,7 @@ export default function Header() {
 						<Avatar
 							animation={'ease-in-out'}
 							size={'md'}
-							name={(userJWT as any).unique_name}
+							name={(userJWT as any).unique_name || 'User'}
 						/>
 						<Button
 							as={'a'}
@@ -138,7 +140,9 @@ export default function Header() {
 				)}
 			</Flex>
 			<Collapse in={isOpen} animateOpacity>
-				<MobileNav {...{ authStatus: (userJWT as any).role === 'Admin' }} />
+				<MobileNav
+					{...{ authStatus: ((userJWT as any)?.role || '') === 'Admin' }}
+				/>
 			</Collapse>
 		</Box>
 	);

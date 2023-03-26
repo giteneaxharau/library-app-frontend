@@ -10,12 +10,14 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
+import { useAuth } from '../hooks/useAuth';
 import { Book } from '../types/Book';
 
 type BookCardProps = {
 	book: Book;
 };
 export default function BookCard({ book }: BookCardProps) {
+	const { authStatus } = useAuth();
 	const { id: bookId, name, description, categories, author } = book;
 	return (
 		<Card
@@ -23,7 +25,7 @@ export default function BookCard({ book }: BookCardProps) {
 			shadow={'lg'}
 			boxShadow={'lg'}
 			dropShadow={'lg'}
-			cursor={'pointer'}
+			cursor={authStatus ? 'pointer' : 'default'}
 		>
 			<CardBody>
 				<Image
