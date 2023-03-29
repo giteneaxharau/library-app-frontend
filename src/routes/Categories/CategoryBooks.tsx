@@ -8,8 +8,10 @@ import API from '../../utils/fetch';
 
 export default function CategoryBooks() {
 	const query = useLocation();
+	const pathName = query.pathname.split('/')[1];
+	console.log(pathName);
 	const { data, error, isLoading } = useQuery('books', () =>
-		API.get(`/categories/${query.state}?include=true`)
+		API.get(`/${pathName}/${query.state}?include=true`)
 	);
 	if (isLoading) return <div>Loading...</div>;
 	return (
@@ -38,10 +40,10 @@ export default function CategoryBooks() {
 				}}
 				gap={10}
 			>
-				{data.result.books.map((book: Partial<Book>) => {
+				{data.result.books.map((book: Book) => {
 					return (
 						<GridItem key={book.id} w="100%" h="100%">
-							<BookCard book={book as Book} />
+							<BookCard book={book} />
 						</GridItem>
 					);
 				})}

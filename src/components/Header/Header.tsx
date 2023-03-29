@@ -312,6 +312,10 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
 	{
+		label: 'Books',
+		href: '/',
+	},
+	{
 		label: 'Categories',
 		href: '/categories',
 	},

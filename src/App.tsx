@@ -11,6 +11,9 @@ import CategoryBooks from './routes/Categories/CategoryBooks';
 import BookId from './routes/BookId';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Authorization from './components/Authorization';
+import Authors from './routes/Authors';
+import Admin from './routes/Admin';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 
 const router = createBrowserRouter([
 	{
@@ -40,11 +43,17 @@ const router = createBrowserRouter([
 		element: (
 			<Authorization>
 				<Layout>
-					<Outlet />
+					<Flex gap={10} flexWrap="wrap">
+						<Outlet />
+					</Flex>
 				</Layout>
 			</Authorization>
 		),
 		children: [
+			{
+				index: true,
+				element: <Admin />,
+			},
 			{
 				path: 'books/*',
 				element: <BookId />,
@@ -61,11 +70,19 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/authors',
-		element: <Layout>Authors</Layout>,
+		element: (
+			<Layout>
+				<Authors />
+			</Layout>
+		),
 	},
 	{
 		path: '/authors/:id',
-		element: <Layout>Author</Layout>,
+		element: (
+			<Layout>
+				<CategoryBooks />
+			</Layout>
+		),
 	},
 	{
 		path: '/login',

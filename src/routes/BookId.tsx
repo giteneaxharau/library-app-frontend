@@ -24,6 +24,7 @@ import API from '../utils/fetch';
 
 export default function BookId() {
 	const query = useLocation();
+	const pathname = query.pathname.split('/')[2];
 	const queryClient = useQueryClient();
 	const { mutateAsync } = useMutation({
 		mutationFn: async (data: any) => {
@@ -81,7 +82,7 @@ export default function BookId() {
 	const [authorsQuery, categoriesQuery] = useQueries([
 		{
 			queryKey: 'authors',
-			queryFn: () => API.get('/author'),
+			queryFn: () => API.get('/authors'),
 		},
 		{
 			queryKey: 'categories',
