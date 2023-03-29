@@ -23,7 +23,10 @@ export const bookCreateSchema = z.object({
 	description: z.string(),
 	authorId: z.string().uuid(),
 	categories: z.array(
-		z.object({ id: z.number(), name: z.string(), priority: z.number() })
+		z.object({
+			label: z.string(),
+			value: z.number(),
+		})
 	),
 });
 
@@ -33,7 +36,10 @@ export const bookUpdateSchema = z.object({
 	description: z.string(),
 	authorId: z.string().uuid(),
 	categories: z.array(
-		z.object({ id: z.number(), name: z.string(), priority: z.number() })
+		z.object({
+			label: z.string(),
+			value: z.number(),
+		})
 	),
 });
 

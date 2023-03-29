@@ -12,8 +12,10 @@ import fetch from '../utils/fetch';
 import BookCard from './BookCard';
 
 export default function MainBooks() {
-	const { data, isLoading } = useQuery('books', () => fetch.get('/books'));
-	// console.log(data.result);
+	const { data, isLoading, error } = useQuery('books', () =>
+		fetch.get('/books')
+	);
+	console.log('MainBooks 16: ', error);
 	if (isLoading) return <div>Loading...</div>;
 	return (
 		<>

@@ -1,25 +1,29 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
 import Layout from './components/Layout';
 import Home from './routes/Home';
-import ErrorPage from './routes/ErrorPage';
+import ErrorPage from './components/ErrorPage';
 import { AuthProvider } from './hooks/useAuth';
 import LoginPage from './routes/LoginPage';
 import RegisterPage from './routes/RegisterPage';
 import AllCategories from './routes/Categories/AllCategories';
 import CategoryBooks from './routes/Categories/CategoryBooks';
+import BookId from './routes/BookId';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import Authorization from './components/Authorization';
 
 const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Home />,
-		errorElement: <ErrorPage />,
+		errorElement: <ErrorPage title="An unexpected error has occurred" />,
 	},
 	{
 		path: '/categories',
 		element: (
 			<Layout>
 				<AllCategories />
+				<Outlet />
 			</Layout>
 		),
 	},
@@ -32,8 +36,28 @@ const router = createBrowserRouter([
 		),
 	},
 	{
-		path: '/books/:id',
-		element: <Layout>Book</Layout>,
+		path: '/admin',
+		element: (
+			<Authorization>
+				<Layout>
+					<Outlet />
+				</Layout>
+			</Authorization>
+		),
+		children: [
+			{
+				path: 'books/*',
+				element: <BookId />,
+			},
+			{
+				path: 'categories/*',
+				element: <BookId />,
+			},
+			{
+				path: 'authors/*',
+				element: <BookId />,
+			},
+		],
 	},
 	{
 		path: '/authors',
@@ -60,6 +84,7 @@ export default function App() {
 			<AuthProvider>
 				<RouterProvider router={router} />
 			</AuthProvider>
+			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 }

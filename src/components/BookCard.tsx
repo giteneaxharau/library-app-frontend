@@ -10,6 +10,7 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Book } from '../types/Book';
 
@@ -19,6 +20,7 @@ type BookCardProps = {
 export default function BookCard({ book }: BookCardProps) {
 	const { authStatus } = useAuth();
 	const { id: bookId, name, description, categories, author } = book;
+	const navigate = useNavigate();
 	return (
 		<Card
 			maxW="sm"
@@ -26,6 +28,13 @@ export default function BookCard({ book }: BookCardProps) {
 			boxShadow={'lg'}
 			dropShadow={'lg'}
 			cursor={authStatus ? 'pointer' : 'default'}
+			onClick={() =>
+				authStatus
+					? navigate('/admin/books/update' + bookId, {
+							state: book,
+					  })
+					: null
+			}
 		>
 			<CardBody>
 				<Image

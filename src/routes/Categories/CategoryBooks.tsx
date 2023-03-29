@@ -9,7 +9,7 @@ import API from '../../utils/fetch';
 export default function CategoryBooks() {
 	const query = useLocation();
 	const { data, error, isLoading } = useQuery('books', () =>
-		API.get(`categories/${query.state}?include=true`)
+		API.get(`/categories/${query.state}?include=true`)
 	);
 	if (isLoading) return <div>Loading...</div>;
 	return (

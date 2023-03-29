@@ -11,16 +11,19 @@ import {
 	Heading,
 	Text,
 	useColorModeValue,
+	InputGroup,
+	InputRightElement,
 } from '@chakra-ui/react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../types/User';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function LoginPage() {
 	const navigate = useNavigate();
+	const [show, setShow] = useState<boolean>(false);
 	const { signin } = useAuth();
 	const {
 		register,
@@ -92,7 +95,23 @@ export default function LoginPage() {
 							</FormControl>
 							<FormControl id="password">
 								<FormLabel>Password</FormLabel>
-								<Input type="password" {...register('password')} />
+								<InputGroup size="md">
+									<Input
+										{...register('password')}
+										pr="4.5rem"
+										type={show ? 'text' : 'password'}
+										placeholder="Enter password"
+									/>
+									<InputRightElement width="4.5rem">
+										<Button
+											h="1.75rem"
+											size="sm"
+											onClick={() => setShow((prev) => !prev)}
+										>
+											{show ? 'Hide' : 'Show'}
+										</Button>
+									</InputRightElement>
+								</InputGroup>
 								{errors && (
 									<Text color="red.500">
 										{(errors as any)['password']?.message}
