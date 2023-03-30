@@ -24,15 +24,11 @@ import {
 } from '@chakra-ui/icons';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
 
 export default function Header() {
-	const { authStatus, user } = useAuth();
+	const { authStatus, user, userJWT } = useAuth();
 	const navigate = useNavigate();
 	const { isOpen, onToggle } = useDisclosure();
-	const userJWT = authStatus
-		? jwtDecode(sessionStorage.getItem('token') || '')
-		: null;
 
 	return (
 		<Box>
@@ -78,9 +74,7 @@ export default function Header() {
 					</Text>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-						<DesktopNav
-							{...{ authStatus: ((userJWT as any)?.role || '') === 'Admin' }}
-						/>
+						<DesktopNav {...{ authStatus: userJWT?.role === 'Admin' }} />
 					</Flex>
 				</Flex>
 
@@ -116,7 +110,7 @@ export default function Header() {
 						<Avatar
 							animation={'ease-in-out'}
 							size={'md'}
-							name={(userJWT as any).unique_name || 'User'}
+							name={userJWT?.unique_name || 'User'}
 						/>
 						<Button
 							as={'a'}
@@ -140,9 +134,7 @@ export default function Header() {
 				)}
 			</Flex>
 			<Collapse in={isOpen} animateOpacity>
-				<MobileNav
-					{...{ authStatus: ((userJWT as any)?.role || '') === 'Admin' }}
-				/>
+				<MobileNav {...{ authStatus: userJWT?.role === 'Admin' }} />
 			</Collapse>
 		</Box>
 	);

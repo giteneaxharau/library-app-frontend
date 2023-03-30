@@ -30,7 +30,7 @@ export default function BookCard({ book }: BookCardProps) {
 			cursor={authStatus ? 'pointer' : 'default'}
 			onClick={() =>
 				authStatus
-					? navigate('/admin/books/update' + bookId, {
+					? navigate('/admin/books/update', {
 							state: book,
 					  })
 					: null

@@ -1,4 +1,9 @@
 import axios from 'axios';
+import { QueryClient } from 'react-query';
+import { Params } from 'react-router-dom';
+import { Author } from '../types/Author';
+import { Book } from '../types/Book';
+import { Category } from '../types/Category';
 
 interface FetchOptions {
 	get: (url: string, config?: any) => Promise<any>;
@@ -6,6 +11,13 @@ interface FetchOptions {
 	put: (url: string, params?: any, config?: any) => Promise<any>;
 	delete: (url: string, config?: any) => Promise<any>;
 }
+
+export type Data = {
+	errorMessages: string[];
+	isSuccess: boolean;
+	statusCode: number;
+	result: any | null;
+};
 
 const port = 5208;
 const baseURL = `http://localhost:${port}/api/v1`;

@@ -7,10 +7,15 @@ export default function Authorization({
 }: {
 	children: React.ReactNode;
 }) {
-	const query = useLocation();
-	const { authStatus } = useAuth();
+	const location = useLocation();
+	const pathname = location.pathname;
+	console.log(pathname);
+	const { authStatus, userJWT } = useAuth();
+	const role = userJWT?.role;
 
-	return authStatus ? (
+	return (role === 'Author' &&
+		(pathname === '/admin' || pathname === '/admin/books/create')) ||
+		role === 'Admin' ? (
 		<>{children}</>
 	) : (
 		<ErrorPage

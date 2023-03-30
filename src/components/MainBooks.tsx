@@ -15,7 +15,6 @@ export default function MainBooks() {
 	const { data, isLoading, error } = useQuery('books', () =>
 		fetch.get('/books')
 	);
-	console.log('MainBooks 16: ', error);
 	if (isLoading) return <div>Loading...</div>;
 	return (
 		<>

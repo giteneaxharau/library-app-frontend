@@ -8,12 +8,15 @@ import LoginPage from './routes/LoginPage';
 import RegisterPage from './routes/RegisterPage';
 import AllCategories from './routes/Categories/AllCategories';
 import CategoryBooks from './routes/Categories/CategoryBooks';
-import BookId from './routes/BookId';
+import BookId from './routes/Admin/BookForm';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Authorization from './components/Authorization';
 import Authors from './routes/Authors';
-import Admin from './routes/Admin';
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import Admin from './routes/Admin/Admin';
+import API from './utils/fetch';
+import Deletion from './routes/Admin/Deletion';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
 	{
@@ -43,12 +46,11 @@ const router = createBrowserRouter([
 		element: (
 			<Authorization>
 				<Layout>
-					<Flex gap={10} flexWrap="wrap">
-						<Outlet />
-					</Flex>
+					<Outlet />
 				</Layout>
 			</Authorization>
 		),
+
 		children: [
 			{
 				index: true,
@@ -56,11 +58,60 @@ const router = createBrowserRouter([
 			},
 			{
 				path: 'books/*',
-				element: <BookId />,
+				element: <Outlet />,
+
+				children: [
+					{
+						path: 'update',
+						element: <BookId />,
+						loader: async () =>
+							await queryClient.fetchQuery({
+								queryKey: 'books',
+								queryFn: () => API.get('/Books'),
+							}),
+					},
+					{
+						path: 'create',
+						element: <BookId />,
+					},
+					{
+						path: 'delete',
+						element: <Deletion />,
+						loader: async () =>
+							await queryClient.fetchQuery({
+								queryKey: 'books',
+								queryFn: () => API.get('/Books'),
+							}),
+					},
+				],
 			},
 			{
 				path: 'categories/*',
-				element: <BookId />,
+				element: <Outlet />,
+				children: [
+					{
+						path: 'update',
+						element: <BookId />,
+						loader: async () =>
+							await queryClient.fetchQuery({
+								queryKey: 'categories',
+								queryFn: () => API.get('/categories'),
+							}),
+					},
+					{
+						path: 'create',
+						element: <BookId />,
+					},
+					{
+						path: 'delete',
+						element: <Deletion />,
+						loader: async () =>
+							await queryClient.fetchQuery({
+								queryKey: 'categories',
+								queryFn: () => API.get('/categories'),
+							}),
+					},
+				],
 			},
 			{
 				path: 'authors/*',
@@ -93,7 +144,6 @@ const router = createBrowserRouter([
 		element: <RegisterPage />,
 	},
 ]);
-const queryClient = new QueryClient();
 
 export default function App() {
 	return (

@@ -3,6 +3,7 @@ import { redirect, useNavigate } from 'react-router-dom';
 import { registerSchema, User } from '../types/User';
 import * as z from 'zod';
 import API from '../utils/fetch';
+import jwtDecode from 'jwt-decode';
 
 interface AuthContext {
 	user: User | null;
@@ -15,7 +16,16 @@ interface AuthContext {
 	}>;
 	signout: () => Promise<void>;
 	authStatus: boolean;
+	userJWT: UserJWT | null;
 }
+
+type UserJWT = {
+	exp: number;
+	iat: number;
+	nbf: number;
+	role: 'Admin' | 'Author';
+	unique_name: string;
+};
 
 const authContext = createContext<AuthContext>({} as AuthContext);
 
@@ -33,6 +43,15 @@ function useProvideAuth() {
 	const authStatus = useMemo(() => {
 		return Boolean(sessionStorage.getItem('token'));
 	}, [user]);
+
+	const userJWT = useMemo(() => {
+		if (authStatus) {
+			const info: UserJWT = jwtDecode(sessionStorage.getItem('token') || '');
+			return info;
+		} else {
+			return null;
+		}
+	}, [authStatus]);
 
 	const signin = async (userName: string, password: string) => {
 		return API.post('/UserAuth/login', { userName, password }).then(
@@ -84,5 +103,6 @@ function useProvideAuth() {
 		authStatus,
 		signup,
 		signout,
+		userJWT,
 	};
 }

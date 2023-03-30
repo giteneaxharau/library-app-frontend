@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import API from '../utils/fetch';
 import { bookIncludedSchema } from './Category';
 
 const authorSchema = z.object({
@@ -32,3 +33,14 @@ export const authorUpdateSchema = z.object({
 	userId: z.string().uuid(),
 });
 export type Author = z.infer<typeof authorSchema>;
+
+
+export function authorQuery(id: string, params:any){
+	return {
+		queryKey: ['author', id],
+		queryFn: async () => {
+			const response = await API.get(`/authors/${id}`);
+			return response;
+		},
+	}
+};

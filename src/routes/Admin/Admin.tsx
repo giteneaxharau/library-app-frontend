@@ -13,54 +13,66 @@ import {
 	Stack,
 	Text,
 	Icon,
+	Button,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { capitalize } from '../utils/utils';
+import { useAuth } from '../../hooks/useAuth';
+import { capitalize } from '../../utils/utils';
 
 export default function Admin() {
+	const { userJWT } = useAuth();
+	const role = userJWT?.role;
 	return (
-		<Flex
-			flexWrap={'wrap'}
-			flexDirection="row"
-			alignItems={'flex-start'}
-			gap={10}
-		>
-			{panelHandler.map((panel) => {
-				const { name, services } = panel;
-				return (
-					<Card
-						shadow={'xl'}
-						boxShadow={'xl'}
-						dropShadow={'xl'}
-						cursor={'pointer'}
-						flexShrink={1}
-						flexGrow={1}
-					>
-						<CardBody>
-							<Heading textAlign={'center'}>{capitalize(name)}</Heading>
-							<Stack spacing={'4'}>
-								{services.map((service) => {
-									const { path, icon, label } = service;
-									return (
-										<Panel
-											key={path}
-											path={`${name}/${path}`}
-											icon={icon}
-											label={label}
-										/>
-									);
-								})}
-							</Stack>
-						</CardBody>
-					</Card>
-				);
-			})}
-			<Panel
-				path="report"
-				icon={<InfoOutlineIcon boxSize={10} />}
-				label="Report Page"
-			/>
-		</Flex>
+		<>
+			<Flex
+				flexWrap={'wrap'}
+				flexDirection="row"
+				alignItems={'flex-start'}
+				gap={10}
+			>
+				{panelHandler
+					.filter((p) => (role === 'Author' ? p.name === 'books' : true))
+					.map((panel) => {
+						const { name, services } = panel;
+						return (
+							<Card
+								shadow={'xl'}
+								boxShadow={'xl'}
+								dropShadow={'xl'}
+								cursor={'pointer'}
+								flexShrink={1}
+								flexGrow={1}
+							>
+								<CardBody>
+									<Heading textAlign={'center'}>{capitalize(name)}</Heading>
+									<Stack spacing={'4'}>
+										{services
+											.filter((s) =>
+												role === 'Author' ? s.path === 'create' : true
+											)
+											.map((service) => {
+												const { path, icon, label } = service;
+												return (
+													<Panel
+														key={path}
+														path={`${name}/${path}`}
+														icon={icon}
+														label={label}
+													/>
+												);
+											})}
+									</Stack>
+								</CardBody>
+							</Card>
+						);
+					})}
+				<Panel
+					path="report"
+					icon={<InfoOutlineIcon boxSize={10} />}
+					label="Report Page"
+				/>
+			</Flex>
+		</>
 	);
 }
 
