@@ -14,7 +14,7 @@ interface AuthContext {
 	signup: ({}: z.infer<typeof registerSchema>) => Promise<void | {
 		error: string[];
 	}>;
-	signout: () => Promise<void>;
+	signout: () => void;
 	authStatus: boolean;
 	userJWT: UserJWT | null;
 }
@@ -92,14 +92,14 @@ function useProvideAuth() {
 			}
 		});
 	};
-	const signout = async () => {
+	const signout = () => {
 		sessionStorage.removeItem('token');
 		setUser(null);
 		window.location.reload();
 	};
 	return {
-		user,
 		signin,
+		user,
 		authStatus,
 		signup,
 		signout,

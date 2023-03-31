@@ -178,7 +178,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/register',
-		element: <RegisterPage />,
+		element: (
+			<Authorization>
+				<RegisterPage />
+			</Authorization>
+		),
 	},
 ]);
 

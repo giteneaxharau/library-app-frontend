@@ -50,7 +50,7 @@ export default function RegisterPage() {
 						{ shouldFocus: true }
 					);
 			})
-			.then(() => navigate('/'));
+			.then(() => navigate('/admin'));
 	}
 
 	useEffect(() => {
@@ -68,7 +68,6 @@ export default function RegisterPage() {
 		}
 	}, [password]);
 
-	// console.log('errors: ', errors);
 
 	return (
 		<Flex
