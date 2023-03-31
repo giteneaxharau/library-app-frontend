@@ -159,7 +159,7 @@ export default function Header() {
 							color={'white'}
 							bg={'blue.500'}
 							href={'/'}
-							onClick={() => signout()}
+							onClick={onOpen}
 							_hover={{
 								bg: 'blue.400',
 							}}
