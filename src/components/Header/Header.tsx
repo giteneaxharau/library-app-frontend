@@ -147,9 +147,7 @@ const DesktopNav = ({ authStatus }: { authStatus: boolean }) => {
 
 	return (
 		<Stack direction={'row'} spacing={4}>
-			{NAV_ITEMS.filter((v) =>
-				authStatus ? v : !v.label.toLowerCase().includes('admin')
-			).map((navItem) => (
+			{NAV_ITEMS.map((navItem) => (
 				<Box key={navItem.label}>
 					<Popover trigger={'hover'} placement={'bottom-start'}>
 						<PopoverTrigger>
@@ -233,9 +231,7 @@ const MobileNav = ({ authStatus }: { authStatus: boolean }) => {
 			p={4}
 			display={{ md: 'none' }}
 		>
-			{NAV_ITEMS.filter((v) =>
-				authStatus ? v : !v.label.toLowerCase().includes('admin')
-			).map((navItem) => (
+			{NAV_ITEMS.map((navItem) => (
 				<MobileNavItem key={navItem.label} {...navItem} />
 			))}
 		</Stack>

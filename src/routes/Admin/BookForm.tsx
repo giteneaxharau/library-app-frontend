@@ -52,6 +52,7 @@ export default function BookForm() {
 				duration: 9000,
 				isClosable: true,
 			});
+			navigate('/admin');
 		},
 		onError(error, variables, context) {
 			toast({

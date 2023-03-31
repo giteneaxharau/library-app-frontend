@@ -12,16 +12,13 @@ import {
 	NumberInput,
 	NumberInputField,
 	NumberInputStepper,
-	Select,
-	Textarea,
 	useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
-import { Author } from '../../types/Author';
-import { Book, bookCreateSchema, bookUpdateSchema } from '../../types/Book';
+import { Book } from '../../types/Book';
 import { Select as ExtraSelect } from 'chakra-react-select';
 import {
 	Category,
@@ -68,6 +65,7 @@ export default function CategoryForm() {
 				duration: 9000,
 				isClosable: true,
 			});
+			navigate('/admin');
 		},
 		onError(error, variables, context) {
 			toast({
@@ -200,13 +198,14 @@ export default function CategoryForm() {
 									id="priority"
 									step={1}
 									max={10}
-									min={0}
+									defaultValue={category?.priority || 1}
+									min={1}
 									placeholder="priority"
 									onChange={(e) => setValue('priority', e)}
 								>
 									<NumberInputField
 										{...register('priority', {
-											value: category?.priority || null,
+											value: category?.priority || 1,
 											valueAsNumber: true,
 										})}
 									/>

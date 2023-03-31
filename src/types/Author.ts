@@ -24,13 +24,13 @@ const authorSchema = z.object({
 export const authorCreateSchema = z.object({
 	name: z.string(),
 	bio: z.string(),
-	userId: z.string().uuid(),
+	userId: z.string().uuid().nullable().or(z.undefined()),
 });
 export const authorUpdateSchema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
 	bio: z.string(),
-	userId: z.string().uuid(),
+	userId: z.string().uuid().nullable().or(z.undefined()),
 });
 export type Author = z.infer<typeof authorSchema>;
 

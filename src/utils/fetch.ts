@@ -20,7 +20,8 @@ export type Data = {
 };
 
 const port = 5208;
-const baseURL = `https://library-app.azurewebsites.net/api/v1`;
+// const baseURL = `https://library-app.azurewebsites.net/api/v1`;
+const baseURL = `http://localhost:${port}/api/v1`;
 
 const API: FetchOptions = {
 	get: async (url, config) => {

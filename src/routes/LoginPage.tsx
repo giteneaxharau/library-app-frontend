@@ -40,7 +40,6 @@ export default function LoginPage() {
 
 	useEffect(() => {
 		if (password) {
-			console.log('password: ', password);
 			if (password.length < 6) {
 				setError(
 					'password',

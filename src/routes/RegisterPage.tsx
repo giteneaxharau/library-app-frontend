@@ -38,19 +38,22 @@ export default function RegisterPage() {
 
 	async function onSubmit(data: any, e: any) {
 		e.preventDefault();
-		await signup({ ...data }).then((res) => {
-			if (!!res?.error)
-				setError(
-					'root',
-					{ type: 'manual', message: res?.error.join(',') },
-					{ shouldFocus: true }
-				);
-		});
+		await signup({ ...data })
+			.then((res) => {
+				if (!!res?.error)
+					setError(
+						'root',
+						{ type: 'manual', message: res?.error.join(',') },
+						{ shouldFocus: true }
+					);
+			})
+			.then(() => navigate('/'));
 	}
 
 	useEffect(() => {
+		const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/g;
 		if (password) {
-			if (password.length < 6) {
+			if (!regex.test(password)) {
 				setError(
 					'password',
 					{ type: 'manual', message: 'Password must be at least 6 characters' },
@@ -142,7 +145,7 @@ export default function RegisterPage() {
 							</FormControl>
 							<FormControl id="password">
 								<FormLabel>Password</FormLabel>
-								<Input type="password" {...register('password')} />
+								<Input type="text" {...register('password')} />
 								{errors && (
 									<Text color="red.500">
 										{(errors as any)['password']?.message}
