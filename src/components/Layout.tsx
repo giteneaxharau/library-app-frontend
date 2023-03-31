@@ -1,5 +1,5 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header/Header';
 
@@ -20,15 +20,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					<ArrowBackIcon />
 				</Button>
 			)}
-			<Box
+			<Flex
 				{...{
 					p: { base: 8, md: 16 },
+					flexDirection: 'column',
+					alignItems: 'center',
 					flexGrow: 1,
 					overflowY: 'auto',
 				}}
 			>
 				{children}
-			</Box>
+			</Flex>
 		</div>
 	);
 }

@@ -93,9 +93,9 @@ function useProvideAuth() {
 		});
 	};
 	const signout = async () => {
-		await API.post('/UserAuth/logout', {
-			token: sessionStorage.getItem('token'),
-		});
+		sessionStorage.removeItem('token');
+		setUser(null);
+		window.location.reload();
 	};
 	return {
 		user,

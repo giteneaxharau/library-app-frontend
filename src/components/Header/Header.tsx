@@ -26,7 +26,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
-	const { authStatus, user, userJWT } = useAuth();
+	const { authStatus, user, userJWT, signout } = useAuth();
 	const navigate = useNavigate();
 	const { isOpen, onToggle } = useDisclosure();
 
@@ -87,7 +87,7 @@ export default function Header() {
 					>
 						<Button
 							as={'a'}
-							display={{ base: 'none', md: 'inline-flex' }}
+							display={'inline-flex'}
 							fontSize={'md'}
 							fontWeight={600}
 							color={'white'}
@@ -111,6 +111,7 @@ export default function Header() {
 							animation={'ease-in-out'}
 							size={'md'}
 							name={userJWT?.unique_name || 'User'}
+							onClick={() => signout()}
 						/>
 						<Button
 							as={'a'}
@@ -120,10 +121,7 @@ export default function Header() {
 							color={'white'}
 							bg={'blue.500'}
 							href={'/'}
-							onClick={() => {
-								sessionStorage.removeItem('token');
-								window.location.pathname = '/';
-							}}
+							onClick={() => signout()}
 							_hover={{
 								bg: 'blue.400',
 							}}
@@ -134,7 +132,7 @@ export default function Header() {
 				)}
 			</Flex>
 			<Collapse in={isOpen} animateOpacity>
-				<MobileNav {...{ authStatus }} />
+				<MobileNav {...{ authStatus, userJWT }} />
 			</Collapse>
 		</Box>
 	);
@@ -226,7 +224,13 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
 	);
 };
 
-const MobileNav = ({ authStatus }: { authStatus: boolean }) => {
+const MobileNav = ({
+	authStatus,
+	userJWT,
+}: {
+	authStatus: boolean;
+	userJWT: any;
+}) => {
 	return (
 		<Stack
 			bg={useColorModeValue('white', 'gray.800')}
