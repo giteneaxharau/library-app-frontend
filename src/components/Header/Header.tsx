@@ -15,6 +15,12 @@ import {
 	useBreakpointValue,
 	useDisclosure,
 	Avatar,
+	AlertDialog,
+	AlertDialogOverlay,
+	AlertDialogContent,
+	AlertDialogHeader,
+	AlertDialogBody,
+	AlertDialogFooter,
 } from '@chakra-ui/react';
 import {
 	HamburgerIcon,
@@ -24,9 +30,12 @@ import {
 } from '@chakra-ui/icons';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 export default function Header() {
 	const { authStatus, user, userJWT, signout } = useAuth();
+	const cancelRef = useRef();
+	const { isOpen: confirmOpen, onOpen, onClose } = useDisclosure();
 	const navigate = useNavigate();
 	const { isOpen, onToggle } = useDisclosure();
 
@@ -111,8 +120,37 @@ export default function Header() {
 							animation={'ease-in-out'}
 							size={'md'}
 							name={userJWT?.unique_name || 'User'}
-							onClick={() => signout()}
+							onClick={onOpen}
 						/>
+						<AlertDialog
+							isOpen={confirmOpen}
+							leastDestructiveRef={cancelRef as any}
+							onClose={onClose}
+							isCentered={true}
+							size={'sm'}
+						>
+							<AlertDialogOverlay>
+								<AlertDialogContent>
+									<AlertDialogHeader fontSize="lg" fontWeight="bold">
+										Log out
+									</AlertDialogHeader>
+
+									<AlertDialogBody>
+										Are you sure? You can't undo this action afterwards.
+									</AlertDialogBody>
+
+									<AlertDialogFooter>
+										<Button ref={cancelRef as any} onClick={onClose}>
+											Cancel
+										</Button>
+										<Button colorScheme="red" onClick={() => signout()} ml={3}>
+											Log out
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialogOverlay>
+						</AlertDialog>
+
 						<Button
 							as={'a'}
 							display={{ base: 'none', md: 'inline-flex' }}
