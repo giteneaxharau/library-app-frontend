@@ -26,6 +26,7 @@ import {
 	categoryUpdateSchema,
 } from '../../types/Category';
 import API, { Data } from '../../utils/fetch';
+import { useState } from 'react';
 
 export default function CategoryForm() {
 	const loader = useLoaderData() as Data;
@@ -33,10 +34,8 @@ export default function CategoryForm() {
 	const query = useLocation();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	const category: Category | null = query.state || null;
-	const { data: bookQuery } = useQuery(
-		'books',
-		async () => await API.get('/books')
+	const [category, setCategory] = useState<Category | null>(
+		query.state || null
 	);
 	const { mutateAsync } = useMutation({
 		mutationFn: async (data: any) => {
@@ -97,7 +96,6 @@ export default function CategoryForm() {
 			category ? categoryUpdateSchema : categoryCreateSchema
 		),
 	});
-	console.log(errors);
 	const toast = useToast();
 
 	const categoryService = async (data: any, e: any) => {
@@ -105,24 +103,11 @@ export default function CategoryForm() {
 		const categoryEntity = {
 			...data,
 			priority: parseInt(data.priority) || 0,
-			books:
-				data?.books
-					?.map((x: any) => {
-						const book = bookQuery?.result?.find((y: Book) => y.id === x.value);
-						if (book)
-							return {
-								id: book.id,
-								name: book.name,
-								description: book.description,
-								author: book.author,
-								images: book.image,
-							};
-						else return null;
-					})
-					.filter(Boolean) || null,
+			books: category?.books || [],
 		};
 		await mutateAsync(categoryEntity);
 	};
+
 	return (
 		<>
 			<Box
@@ -140,11 +125,7 @@ export default function CategoryForm() {
 						</FormLabel>
 						<ExtraSelect
 							name={'bookSelect'}
-							onChange={(e) =>
-								navigate('', {
-									state: (e as any).value,
-								})
-							}
+							onChange={(e) => setCategory((e as any).value)}
 							options={result?.map((x: Book) => {
 								return {
 									value: x,
@@ -221,50 +202,6 @@ export default function CategoryForm() {
 								)}
 							</FormControl>
 						</Flex>
-
-						<Controller
-							control={control}
-							name="books"
-							defaultValue={category?.books?.map((category: any) => ({
-								label: category.name,
-								value: category.id,
-							}))}
-							rules={{ required: false }}
-							render={({
-								field: { onChange, ref, value, name, onBlur },
-								fieldState: { error },
-							}) => {
-								return (
-									<FormControl isInvalid={!!error}>
-										<FormLabel htmlFor="books" fontWeight={'normal'} mt="2%">
-											Books
-										</FormLabel>
-										<ExtraSelect
-											id="books"
-											isMulti
-											ref={ref}
-											name={name}
-											value={value}
-											onChange={onChange}
-											onBlur={onBlur}
-											options={bookQuery?.result.map((book: Book) => ({
-												label: book.name,
-												value: book.id,
-											}))}
-											isSearchable
-											placeholder="Select books in this category(optional)..."
-											closeMenuOnSelect={false}
-											hasStickyGroupHeaders
-										/>
-										{error && (
-											<FormHelperText color={'red'}>
-												{error.message}
-											</FormHelperText>
-										)}
-									</FormControl>
-								);
-							}}
-						/>
 						<Flex w={'full'} justifyContent="flex-end">
 							<Button
 								w="7rem"

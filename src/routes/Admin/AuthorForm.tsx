@@ -30,6 +30,7 @@ import {
 	authorCreateSchema,
 } from '../../types/Author';
 import { User } from '../../types/User';
+import { useState } from 'react';
 
 export default function AuthorForm() {
 	const loader = useLoaderData() as Data;
@@ -37,7 +38,7 @@ export default function AuthorForm() {
 	const query = useLocation();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	const author: Author | null = query.state || null;
+	const [author, setAuthor] = useState<Author | null>(query.state || null);
 	const { data: usersQuery } = useQuery(
 		['authors', 'users'],
 		async () => await API.get('/authors/users')
@@ -96,12 +97,10 @@ export default function AuthorForm() {
 	} = useForm({
 		resolver: zodResolver(author ? authorUpdateSchema : authorCreateSchema),
 	});
-	console.log(errors);
 	const toast = useToast();
 
 	const authorService = async (data: any, e: any) => {
 		e.preventDefault();
-		console.log(data);
 		const authorEntity = { ...data };
 		await mutateAsync(authorEntity);
 	};
@@ -122,11 +121,7 @@ export default function AuthorForm() {
 						</FormLabel>
 						<ExtraSelect
 							name={'bookSelect'}
-							onChange={(e) =>
-								navigate('', {
-									state: (e as any).value,
-								})
-							}
+							onChange={(e) => setAuthor((e as any)?.value || null)}
 							options={result?.map((x: Book) => {
 								return {
 									value: x,

@@ -12,7 +12,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQueries, useQueryClient } from 'react-query';
 import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
@@ -28,6 +28,7 @@ export default function BookForm() {
 	const query = useLocation();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
+	const [book, setBook] = useState<Book | null>(query.state || null);
 	const { mutateAsync } = useMutation({
 		mutationFn: async (data: any) => {
 			if (book) {
@@ -67,7 +68,6 @@ export default function BookForm() {
 			await queryClient.invalidateQueries({ queryKey: 'books' });
 		},
 	});
-	const book: Book | null = query.state || null;
 	const {
 		register,
 		handleSubmit,
@@ -130,6 +130,10 @@ export default function BookForm() {
 			}
 		});
 	};
+
+	useLayoutEffect(() => {
+		if (query.state) setBook(query.state);
+	}, [query.state]);
 	if (isLoading) return <div>Loading...</div>;
 	return (
 		<>
@@ -148,11 +152,7 @@ export default function BookForm() {
 						</FormLabel>
 						<ExtraSelect
 							name={'bookSelect'}
-							onChange={(e) =>
-								navigate('', {
-									state: (e as any).value,
-								})
-							}
+							onChange={(e) => setBook((e as any).value)}
 							options={result?.map((x: Book) => {
 								return {
 									value: x,
