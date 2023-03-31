@@ -16,12 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		>
 			<Header />
 			{location.pathname.includes('admin') && (
-				<Button
-					w={'32px'}
-					h={'32px'}
-					m={'10px'}
-					onClick={() => navigate(-1, { state: null })}
-				>
+				<Button w={'32px'} h={'32px'} m={'10px'} onClick={() => navigate(-1)}>
 					<ArrowBackIcon />
 				</Button>
 			)}
