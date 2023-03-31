@@ -43,7 +43,7 @@ export default function BookCard({ book }: BookCardProps) {
 						'https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80'
 					}
 					sx={{ objectFit: 'cover' }}
-					alt="Green double couch with wooden legs"
+					alt={name + " book's cover"}
 					borderRadius="lg"
 				/>
 				<Stack mt="6" spacing="3">

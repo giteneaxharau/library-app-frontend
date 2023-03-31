@@ -47,7 +47,6 @@ function useProvideAuth() {
 	const userJWT = useMemo(() => {
 		if (authStatus) {
 			const info: UserJWT = jwtDecode(sessionStorage.getItem('token') || '');
-			console.log(info);
 			return info;
 		} else {
 			return null;

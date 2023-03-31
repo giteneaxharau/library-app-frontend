@@ -21,9 +21,6 @@ export type Data = {
 
 const port = 5208;
 let baseURL = `https://library-app.azurewebsites.net/api/v1`;
-if (import.meta.env.DEV) {
-	baseURL = `http://localhost:${port}/api/v1`;
-}
 
 const API: FetchOptions = {
 	get: async (url, config) => {
