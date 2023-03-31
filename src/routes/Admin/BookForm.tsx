@@ -96,16 +96,20 @@ export default function BookForm() {
 		e.preventDefault();
 		const bookEntity: any = {
 			...data,
-			categories: data.categories.map((x: any) => {
-				const category = categoriesQuery.data.result.find(
-					(c: Category) => c.id === x.value
-				);
-				return {
-					id: category.id,
-					name: category.name,
-					priority: category.priority,
-				};
-			}),
+			categories: data.categories
+				.map((x: any) => {
+					const category = categoriesQuery.data.result.find(
+						(c: Category) => c.id === x.value
+					);
+					if (category)
+						return {
+							id: category.id,
+							name: category.name,
+							priority: category.priority,
+						};
+					else return null;
+				})
+				.filter(Boolean),
 		};
 		await mutateAsync(bookEntity).then((res) => {
 			if ((res.statusCode === 204 || res.statusCode === 201) && images) {

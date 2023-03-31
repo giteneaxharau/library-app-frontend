@@ -15,6 +15,7 @@ import Authors from './routes/Authors';
 import Admin from './routes/Admin/Admin';
 import API from './utils/fetch';
 import Deletion from './routes/Admin/Deletion';
+import CategoryForm from './routes/Admin/CategoryForm';
 
 const queryClient = new QueryClient();
 
@@ -91,16 +92,16 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: 'update',
-						element: <BookId />,
+						element: <CategoryForm />,
 						loader: async () =>
 							await queryClient.fetchQuery({
 								queryKey: 'categories',
-								queryFn: () => API.get('/categories'),
+								queryFn: () => API.get('/categories?include=true'),
 							}),
 					},
 					{
 						path: 'create',
-						element: <BookId />,
+						element: <CategoryForm />,
 					},
 					{
 						path: 'delete',

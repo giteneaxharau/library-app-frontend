@@ -14,6 +14,7 @@ import {
 	Text,
 	Icon,
 	Button,
+	Box,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -35,35 +36,26 @@ export default function Admin() {
 					.map((panel) => {
 						const { name, services } = panel;
 						return (
-							<Card
-								shadow={'xl'}
-								boxShadow={'xl'}
-								dropShadow={'xl'}
-								cursor={'pointer'}
-								flexShrink={1}
-								flexGrow={1}
-							>
-								<CardBody>
-									<Heading textAlign={'center'}>{capitalize(name)}</Heading>
-									<Stack spacing={'4'}>
-										{services
-											.filter((s) =>
-												role === 'Author' ? s.path === 'create' : true
-											)
-											.map((service) => {
-												const { path, icon, label } = service;
-												return (
-													<Panel
-														key={path}
-														path={`${name}/${path}`}
-														icon={icon}
-														label={label}
-													/>
-												);
-											})}
-									</Stack>
-								</CardBody>
-							</Card>
+							<Box cursor={'pointer'} flexShrink={1} flexGrow={1}>
+								<Heading textAlign={'center'}>{capitalize(name)}</Heading>
+								<Stack spacing={'4'}>
+									{services
+										.filter((s) =>
+											role === 'Author' ? s.path === 'create' : true
+										)
+										.map((service) => {
+											const { path, icon, label } = service;
+											return (
+												<Panel
+													key={path}
+													path={`${name}/${path}`}
+													icon={icon}
+													label={label}
+												/>
+											);
+										})}
+								</Stack>
+							</Box>
 						);
 					})}
 				<Panel

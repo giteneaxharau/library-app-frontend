@@ -13,7 +13,7 @@ export const bookIncludedSchema = z.object({
 			bio: z.string(),
 		})
 		.partial(),
-	image: z.array(z.string().url()),
+	images: z.array(z.string().url()),
 });
 
 const categorySchema = z.object({
@@ -29,14 +29,30 @@ const categorySchema = z.object({
 export const categoryCreateSchema = z.object({
 	name: z.string(),
 	priority: z.number().max(10).min(1),
-	books: z.array(z.string()).nullable(),
+	books: z
+		.array(
+			z.object({
+				label: z.string(),
+				value: z.string(),
+			})
+		)
+		.nullable()
+		.or(z.undefined()),
 });
 
 export const categoryUpdateSchema = z.object({
 	id: z.number(),
 	name: z.string(),
 	priority: z.number().max(10).min(1),
-	books: z.array(bookIncludedSchema).nullable(),
+	books: z
+		.array(
+			z.object({
+				label: z.string(),
+				value: z.string(),
+			})
+		)
+		.nullable()
+		.or(z.undefined()),
 });
 
 export type Category = z.infer<typeof categorySchema>;
