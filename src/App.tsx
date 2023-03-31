@@ -17,6 +17,7 @@ import API from './utils/fetch';
 import Deletion from './routes/Admin/Deletion';
 import CategoryForm from './routes/Admin/CategoryForm';
 import AuthorForm from './routes/Admin/AuthorForm';
+import ReportPage from './routes/Admin/ReportPage';
 
 const queryClient = new QueryClient();
 
@@ -142,6 +143,16 @@ const router = createBrowserRouter([
 							}),
 					},
 				],
+			},
+			{
+				path: 'report',
+				element: <ReportPage />,
+				loader: async () =>
+					await queryClient.fetchQuery({
+						queryKey: 'authors',
+						queryFn: async () =>
+							await API.get('/authors?include=true&orderByBooks=true'),
+					}),
 			},
 		],
 	},

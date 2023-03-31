@@ -45,7 +45,7 @@ export default function Authors() {
 				{data.result.map((author: Author) => {
 					return (
 						<GridItem key={author.id} w="100%" h="100%">
-							<AuthorCard {...author} />
+							<AuthorCard {...{ author }} />
 						</GridItem>
 					);
 				})}

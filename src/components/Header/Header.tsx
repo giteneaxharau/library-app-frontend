@@ -74,7 +74,7 @@ export default function Header() {
 					</Text>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-						<DesktopNav {...{ authStatus: userJWT?.role === 'Admin' }} />
+						<DesktopNav {...{ authStatus }} />
 					</Flex>
 				</Flex>
 
@@ -134,7 +134,7 @@ export default function Header() {
 				)}
 			</Flex>
 			<Collapse in={isOpen} animateOpacity>
-				<MobileNav {...{ authStatus: userJWT?.role === 'Admin' }} />
+				<MobileNav {...{ authStatus }} />
 			</Collapse>
 		</Box>
 	);
@@ -147,7 +147,9 @@ const DesktopNav = ({ authStatus }: { authStatus: boolean }) => {
 
 	return (
 		<Stack direction={'row'} spacing={4}>
-			{NAV_ITEMS.map((navItem) => (
+			{NAV_ITEMS.filter((v) =>
+				authStatus ? true : !v.label.toLowerCase().includes('admin')
+			).map((navItem) => (
 				<Box key={navItem.label}>
 					<Popover trigger={'hover'} placement={'bottom-start'}>
 						<PopoverTrigger>
@@ -231,7 +233,9 @@ const MobileNav = ({ authStatus }: { authStatus: boolean }) => {
 			p={4}
 			display={{ md: 'none' }}
 		>
-			{NAV_ITEMS.map((navItem) => (
+			{NAV_ITEMS.filter((v) =>
+				authStatus ? true : !v.label.toLowerCase().includes('admin')
+			).map((navItem) => (
 				<MobileNavItem key={navItem.label} {...navItem} />
 			))}
 		</Stack>

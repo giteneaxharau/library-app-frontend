@@ -6,17 +6,20 @@ import {
 	Stack,
 	Text,
 	Tooltip,
+	Badge,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { Author } from '../types/Author';
 
 type AuthorCardProps = {
-	id: string;
-	name: string;
-	bio: string;
+	author: Author;
+	index?: number;
 };
 
-export default function AuthorCard({ name, bio, id }: AuthorCardProps) {
+export default function AuthorCard({ author, index }: AuthorCardProps) {
 	const navigate = useNavigate();
+	const { name, bio, books, id } = author;
+	console.log('index', index);
 	return (
 		<Tooltip
 			label="See this authors books"
@@ -39,7 +42,15 @@ export default function AuthorCard({ name, bio, id }: AuthorCardProps) {
 				}
 			>
 				<CardBody display={'flex'} flexDirection="column" alignItems={'center'}>
+					{index && index >= 0 && (
+						<Badge variant="solid" colorScheme="green" m="10px" fontSize="1em">
+							{index}
+						</Badge>
+					)}
 					<Avatar name={name} size="lg" />
+					{books && books.length ? (
+						<Text>Number of books {books.length}</Text>
+					) : null}
 					<Stack mt="6" spacing="3">
 						<Heading size="lg">{name}</Heading>
 						<Text>{bio}</Text>

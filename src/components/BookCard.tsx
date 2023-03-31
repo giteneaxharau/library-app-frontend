@@ -18,7 +18,7 @@ type BookCardProps = {
 	book: Book;
 };
 export default function BookCard({ book }: BookCardProps) {
-	const { authStatus } = useAuth();
+	const { userJWT } = useAuth();
 	const { id: bookId, name, description, categories, author } = book;
 	const navigate = useNavigate();
 	return (
@@ -27,9 +27,9 @@ export default function BookCard({ book }: BookCardProps) {
 			shadow={'lg'}
 			boxShadow={'lg'}
 			dropShadow={'lg'}
-			cursor={authStatus ? 'pointer' : 'default'}
+			cursor={userJWT?.role === 'Admin' ? 'pointer' : 'default'}
 			onClick={() =>
-				authStatus
+				userJWT?.role === 'Admin'
 					? navigate('/admin/books/update', {
 							state: book,
 					  })
@@ -42,7 +42,7 @@ export default function BookCard({ book }: BookCardProps) {
 						book?.images?.[0] ||
 						'https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80'
 					}
-					sx={{ aspectRatio: '4/3', objectFit: 'cover' }}
+					sx={{ objectFit: 'cover' }}
 					alt="Green double couch with wooden legs"
 					borderRadius="lg"
 				/>
