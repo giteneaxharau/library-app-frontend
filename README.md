@@ -6,7 +6,7 @@ This is a frontend application for the Library App REST API. It is built with Vi
 
 To install the frontend, clone the repository and navigate to the project directory. Then, run the following command:
 
-``` js
+```javascript
     npm install
 ```
 
@@ -16,10 +16,9 @@ This will install all of the necessary dependencies.
 
 To start the frontend, run the following command:
 
-``` js
+```javascript
     npm run dev
 ```
-
 
 This will start the development server and open the application in your default browser.
 
